@@ -24,6 +24,6 @@ for c in current_sections:
         'movie_code': movie_code
     }
 
-    with open('./movies.csv', 'a') as f:
+    with open('./movies.csv', 'a', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=['movie_title', 'movie_code'])
         writer.writerow(movie_data)
