@@ -31,6 +31,7 @@ for c in current_sections:
 
 # print(final_movie_data)
 
+# 이번 실습의 경우 headers 없어도 잘 작동함
 headers = {
     'authority': 'movie.naver.com',
     'upgrade-insecure-requests': '1',
@@ -59,12 +60,17 @@ for movie in final_movie_data:
     soup = BeautifulSoup(response.text, 'html.parser')
     result = soup.select(
         'body > div > div > div.score_result > ul > li'
-
     )
-    print(movie['movie_title'])
+    print(f"===================={movie['movie_title']}====================")
+    count = 0
     for r in result:
-        point = r.select_one('div.star_score > em').text
-        review = r.select_one(
-            'div.score_reple > p > span:nth-last-child(1)').text.strip()
-        print(point, review)
-    print('=============================')
+        star_score = r.select_one('div.star_score > em').text
+        if r.select_one(
+                f'div.score_reple > p > span#_filtered_ment_{count} > span#_unfold_ment{count}'):
+            score_reple = r.select_one(
+                f'div.score_reple > p > span#_filtered_ment_{count} > span > a')['data-src']
+        else:
+            score_reple = r.select_one(
+                f'div.score_reple > p > span#_filtered_ment_{count}').text.strip()
+        count += 1
+        print(star_score, score_reple)
